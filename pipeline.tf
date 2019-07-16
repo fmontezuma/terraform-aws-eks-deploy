@@ -1,21 +1,14 @@
-variable "environments" {
-    type    = "list"
-    default = ["dev", "hml", "prod"]
-}
-
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  count = length(var.environments)
-  bucket = "k8s-pipeline-bucket-${var.environments[count.index]}"
+  bucket = "k8s-pipeline-bucket-${var.env}"
   acl    = "private"
 }
 
 resource "aws_codepipeline" "codepipeline" {
-  count = length(var.environments)
-  name     = "k8s-pipeline-${var.environments[count.index]}"
+  name     = "k8s-pipeline-${var.env}"
   role_arn = "${var.codepipeline_role_arn}"
 
   artifact_store {
-    location = "${aws_s3_bucket.codepipeline_bucket[count.index].bucket}"
+    location = "${aws_s3_bucket.codepipeline_bucket.bucket}"
     type     = "S3"
   }
 
@@ -32,7 +25,7 @@ resource "aws_codepipeline" "codepipeline" {
 
       configuration = {
         RepositoryName = "k8s-deployment"
-        BranchName = "${var.environments[count.index]}"
+        BranchName = "${var.env}"
       }
     }
   }
@@ -49,7 +42,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "${aws_codebuild_project.deploy[count.index].name}"
+        ProjectName = "${aws_codebuild_project.deploy.name}"
       }
     }
   }
