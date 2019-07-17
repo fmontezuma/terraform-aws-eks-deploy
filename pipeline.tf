@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket = "k8s-pipeline-bucket-${var.env}"
+  bucket = "${format("%.63s", "${data.aws_caller_identity.current.account_id}-k8s-pipeline-${var.env}")}"
   acl    = "private"
 }
 
