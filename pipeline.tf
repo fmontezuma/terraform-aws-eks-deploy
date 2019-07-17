@@ -24,7 +24,7 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        RepositoryName = "k8s-deployment"
+        RepositoryName = "k8s-deploy"
         BranchName = "${var.env}"
       }
     }
