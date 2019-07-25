@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "codepipeline_bucket" {
 }
 
 resource "aws_codepipeline" "codepipeline" {
-  name     = "k8s-pipeline-${var.env}"
+  name     = "k8s-deploy-${var.env}"
   role_arn = "${var.codepipeline_role_arn}"
 
   artifact_store {
