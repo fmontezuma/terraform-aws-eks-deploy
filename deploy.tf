@@ -1,8 +1,5 @@
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
-
 resource "aws_codebuild_project" "deploy" {
-  name          = "k8s-deploy-${var.env}"
+  name          = "${var.project_name}-k8s-deploy-${var.env}"
   description   = "Deploy process for k8s-deploy"
   service_role  = "${var.codebuild_deploy_role_arn}"
 
@@ -20,8 +17,8 @@ resource "aws_codebuild_project" "deploy" {
 
   source {
     type            = "CODECOMMIT"
-    location        = "https://git-codecommit.${data.aws_region.current.name}.amazonaws.com/v1/repos/k8s-deploy"
+    location        = "https://git-codecommit.${data.aws_region.current.name}.amazonaws.com/v1/repos/${var.project_name}-k8s-deploy"
     git_clone_depth = 1
-    buildspec = templatefile("${path.module}/deploy-buildspec.json.tpl", {account_id = "${data.aws_caller_identity.current.account_id}", region = "${data.aws_region.current.name}", eks_cluster_name = "${var.eks_cluster_name}" })
+    buildspec = templatefile("${path.module}/deploy-buildspec.json.tpl", {account_id = "${var.account_id}", region = "${var.region}", eks_cluster_name = "${var.eks_cluster_name}" })
   }
 }

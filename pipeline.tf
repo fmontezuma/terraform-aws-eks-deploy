@@ -1,14 +1,9 @@
-resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket = "${format("%.63s", "${data.aws_caller_identity.current.account_id}-k8s-pipeline-${var.env}")}"
-  acl    = "private"
-}
-
 resource "aws_codepipeline" "codepipeline" {
-  name     = "k8s-deploy-${var.env}"
+  name     = "${var.project_name}-k8s-deploy-${var.env}"
   role_arn = "${var.codepipeline_role_arn}"
 
   artifact_store {
-    location = "${aws_s3_bucket.codepipeline_bucket.bucket}"
+    location = "${var.pipeline_s3_bucket}"
     type     = "S3"
   }
 
@@ -24,7 +19,7 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        RepositoryName = "k8s-deploy"
+        RepositoryName = "${var.project_name}-k8s-deploy"
         BranchName = "${var.env}"
       }
     }
