@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 resource "aws_codebuild_project" "deploy" {
   name          = "${var.project_name}-k8s-deploy-${var.env}"
   description   = "Deploy process for k8s-deploy"
