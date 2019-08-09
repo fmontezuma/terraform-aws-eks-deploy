@@ -13,4 +13,4 @@ phases:
       - aws eks update-kubeconfig --name ${eks_cluster_name}
   build:
     commands:
-      - kubectl apply -f . -R
+      - wget -O - https://raw.githubusercontent.com/fmontezuma/helm-chart/master/${env}/updateKubectl.sh | sh

@@ -21,6 +21,6 @@ resource "aws_codebuild_project" "deploy" {
     type            = "CODECOMMIT"
     location        = "https://git-codecommit.${data.aws_region.current.name}.amazonaws.com/v1/repos/${var.project_name}-k8s-deploy"
     git_clone_depth = 1
-    buildspec = templatefile("${path.module}/deploy-buildspec.json.tpl", {account_id = "${var.account_id}", region = "${var.region}", eks_cluster_name = "${var.eks_cluster_name}" })
+    buildspec = templatefile("${path.module}/deploy-buildspec.json.tpl", {account_id = "${var.account_id}", region = "${var.region}", env = "${var.env}", eks_cluster_name = "${var.eks_cluster_name}" })
   }
 }
