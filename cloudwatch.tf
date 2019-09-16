@@ -1,3 +1,7 @@
+data "aws_codecommit_repository" "repo" {
+  repository_name = "${var.project_name}-k8s-deploy"
+}
+
 resource "aws_cloudwatch_event_rule" "rule" {
   name = "${var.project_name}-k8s-deploy-${var.env}"
   role_arn = var.codepipeline_role_arn
@@ -5,10 +9,14 @@ resource "aws_cloudwatch_event_rule" "rule" {
 {
 	"source":["aws.codecommit"],
 	"detail-type":["CodeCommit Repository State Change"],
-	"resources":["${aws_codepipeline.codepipeline.arn}"],
+	"resources":["${data.aws_codecommit_repository.repo.arn}"],
 	"detail":{
+        "event": [
+          "referenceCreated",
+          "referenceUpdated"
+        ],
 		"referenceType":["branch"],
-		"referenceName":["master"]
+		"referenceName":["${var.env}"]
 	}
 }
 PATTERN
