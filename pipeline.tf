@@ -21,6 +21,7 @@ resource "aws_codepipeline" "codepipeline" {
       configuration = {
         RepositoryName = "${var.project_name}-k8s-deploy"
         BranchName = "${var.env}"
+        PollForSourceChanges = false
       }
     }
   }
