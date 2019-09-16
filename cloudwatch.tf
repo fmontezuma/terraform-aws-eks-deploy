@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_event_rule" "rule" {
   name = "${var.project_name}-k8s-deploy-${var.env}"
-  role = "${var.codepipeline_role_arn}"
+  role_arn = "${var.codepipeline_role_arn}"
   event_pattern = <<PATTERN
 {
 	"source":["aws.codecommit"],
